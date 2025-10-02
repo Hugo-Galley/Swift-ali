@@ -1,23 +1,26 @@
 import SwiftUI
 
-struct LoginView: View {
-    
-    @StateObject private var viewModel =  AuthViewModel()
+struct RegisterView: View {
+    @StateObject private var viewModel = AuthViewModel()
     
     var body: some View {
         ZStack {
             LinearGradient(gradient: Gradient(colors: [.liquidGlass, .white]),
                            startPoint: .topLeading,
                            endPoint: .bottomTrailing)
-            .ignoresSafeArea()
-            
-            VStack ( spacing: 25) {
-                Image(systemName: "sportscourt.fill")
+                .ignoresSafeArea()
+            VStack (spacing : 25 ) {
+                Image(systemName: "tshirt.fill")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .foregroundColor(.psgBlue)
+                    .frame( width: 100, height: 100)
+                    .foregroundColor(.psgRed)
                     .padding(.bottom, 30)
+                
+                TextField("Nom Complet", text: $viewModel.fullName)
+                    .padding()
+                    .background(Color.white.opacity(0.8))
+                    .cornerRadius(12)
                 
                 TextField("Email", text: $viewModel.email)
                     .padding()
@@ -30,24 +33,29 @@ struct LoginView: View {
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(12)
                 
+                SecureField("Confirmer le mot de passe", text: $viewModel.confirmPassword)
+                    .padding()
+                    .background(Color.white.opacity(0.8))
+                    .cornerRadius(12)
+                
                 Button(action: {
-                    viewModel.login()
+                    viewModel.register()
                 }) {
-                    Text("Se connecter")
+                    Text("S'inscrire")
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(LinearGradient(colors: [.psgBlue, .psgRed],
+                        .background(LinearGradient(colors: [.psgRed, .psgBlue],
                                                    startPoint: .leading,
                                                    endPoint: .trailing))
                         .cornerRadius(12)
                 }
                 
                 HStack {
-                    Text("Pas de compte ?")
-                    NavigationLink(destination: RegisterView()) {
-                        Text("S'inscrire")
-                            .foregroundColor(.psgRed)
+                    Text("Déjà un compte ?")
+                    NavigationLink(destination: LoginView()) {
+                        Text("Se connecter")
+                            .foregroundColor(.psgBlue)
                             .bold()
                     }
                 }
@@ -55,7 +63,7 @@ struct LoginView: View {
             }
             .padding(.horizontal, 30)
         }
-        .navigationTitle("Connexion")
+        .navigationTitle("Inscription")
         .navigationBarTitleDisplayMode(.inline)
     }
 }
