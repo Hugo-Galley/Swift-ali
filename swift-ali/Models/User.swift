@@ -2,8 +2,9 @@ import Foundation
 
 struct User : Identifiable {
     let id: Int64
-    let fullName: String
-    let email: String
-    let password: String
+    var fullName: String
+    var email: String
+    var password: String
+    var profileImage: String?
 }
  

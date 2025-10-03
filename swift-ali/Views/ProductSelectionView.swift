@@ -8,11 +8,12 @@ struct ProductSelectionView: View {
 
     @State private var selectedSize: String? = nil
     @Environment(\.presentationMode) var presentationMode
+    
+    @EnvironmentObject var cart: CartViewModel
 
     var body: some View {
         NavigationView {
             VStack(alignment: .leading, spacing: 0) {
-
                 HStack {
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
@@ -21,39 +22,31 @@ struct ProductSelectionView: View {
                             .font(.title2)
                             .foregroundColor(.black)
                     }
-
                     Spacer()
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 10)
                 
-                // TITRE DU PRODUIT
                 Text(title)
                     .font(.title2)
-                    .fontWeight(.regular)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
                 
-                // IMAGE DU PRODUIT
                 Image(imageName)
                     .resizable()
+                    .scaledToFit()
                     .frame(height: 300)
-                    .cornerRadius(0)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
                 
-                // PRIX
                 Text("Prix : \(price)")
                     .font(.body)
-                    .fontWeight(.regular)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
                 
-                // SECTION TAILLES
                 VStack(alignment: .leading, spacing: 12) {
                     Text("Taille :")
                         .font(.body)
-                        .fontWeight(.regular)
                     
                     HStack(spacing: 12) {
                         ForEach(sizes, id: \.self) { size in
@@ -61,8 +54,6 @@ struct ProductSelectionView: View {
                                 selectedSize = size
                             }) {
                                 Text(size)
-                                    .font(.body)
-                                    .fontWeight(.regular)
                                     .frame(width: 50, height: 40)
                                     .background(selectedSize == size ? Color.black : Color.gray.opacity(0.2))
                                     .foregroundColor(selectedSize == size ? .white : .black)
@@ -77,25 +68,31 @@ struct ProductSelectionView: View {
                 
                 Spacer()
                 
-                // BOUTON AJOUTER AU PANIER
                 Button(action: {
-                    print("Produit ajouté au panier, taille : \(selectedSize ?? "Aucune")")
+                    if let size = selectedSize,
+                       let priceValue = Double(price.replacingOccurrences(of: "€", with: "")
+                                                    .replacingOccurrences(of: ",", with: ".")
+                                                    .trimmingCharacters(in: .whitespaces)) {
+                        let product = Product(image: imageName, title: title, price: priceValue, size: size)
+                        cart.addToCart(product)
+                        print(" Produit ajouté : \(title), taille : \(size)")
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }) {
                     Text("Ajouter au panier")
-                        .font(.body)
-                        .fontWeight(.regular)
-                        .foregroundColor(.black)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .frame(height: 50)
-                        .background(Color.gray.opacity(0.3))
+                        .background(selectedSize == nil ? Color.gray : Color.psgBlue)
                         .cornerRadius(8)
                 }
                 .padding(.horizontal, 20)
-                .padding(.bottom, 100) // Espace pour la tab bar
+                .padding(.bottom, 100)
+                .disabled(selectedSize == nil)
             }
             .background(Color.white)
         }
         .navigationBarHidden(true)
     }
 }
-

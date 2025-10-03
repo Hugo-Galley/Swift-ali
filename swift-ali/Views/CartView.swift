@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ShopView: View {
+struct CartView: View {
     @EnvironmentObject var cart: CartViewModel
     
     var body: some View {
@@ -52,13 +52,13 @@ struct ShopView: View {
                 .padding()
                 
                 Button(action: {
-                    print("Commande validée ")
+                    print("Passer la commande")
                 }) {
-                    Text(" Commander")
+                    Text("Commander")
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.psgBlue)
+                        .background(Color.green)
                         .cornerRadius(12)
                 }
                 .padding(.horizontal)

@@ -7,6 +7,7 @@ struct ContentView: View {
         NavigationStack {
             if viewModel.isLoggedIn {
                 MainView()
+                    .environmentObject(viewModel)
             } else {
                 LoginView()
                     .environmentObject(viewModel)

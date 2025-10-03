@@ -1,13 +1,6 @@
-//
-//  HomeView.swift
-//  swift-ali
-//
-//  Created by Hugo Galley on 02/10/2025.
-//
-
 import SwiftUI
 
-struct HomeView : View {
+struct HomeView: View {
     
     let products = [
         (image: "psg", title: "PSG Domicile 24/25", price: "89,99 €"),
@@ -20,11 +13,17 @@ struct HomeView : View {
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
     ]
+    
     var body: some View {
-        ScrollView{
-            LazyVGrid(columns: collumns, spacing: 16){
-                ForEach(products, id: \.title){ product in
-                    NavigationLink(destination: ProductSelectionView(imageName: product.image, title: product.title, price: product.price, sizes: ["S","M","L","XL"])){
+        ScrollView {
+            LazyVGrid(columns: collumns, spacing: 16) {
+                ForEach(products, id: \.title) { product in
+                    NavigationLink(destination: ProductSelectionView(
+                        imageName: product.image,
+                        title: product.title,
+                        price: product.price,
+                        sizes: ["S","M","L","XL"]
+                    )) {
                         CardView(
                             imageName: product.image,
                             title: product.title,
@@ -32,10 +31,16 @@ struct HomeView : View {
                         )
                     }
                     .foregroundColor(.black)
-                    
                 }
             }
             .padding()
+        }
+        .navigationTitle("Boutique")
+        .toolbar {
+            NavigationLink(destination: CartView()) {
+                Image(systemName: "cart.fill")
+                    .foregroundColor(.psgRed)
+            }
         }
     }
 }

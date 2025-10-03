@@ -12,6 +12,7 @@ class AuthViewModel: ObservableObject {
     @Published var isLoggedIn: Bool = false
     @Published var alertMessage: String = ""
     @Published var showAlert: Bool = false
+    @Published var currentUser: User? = nil
     
     private let db = DatabaseManager.shared
     
@@ -21,6 +22,7 @@ class AuthViewModel: ObservableObject {
             print("Connexion réussie")
             isLoggedIn = true
             alertMessage = "Connexion Réussie !"
+            currentUser = db.getUserByEmail(email: email)
         } else {
             alertMessage = "Email ou mot de passe invalide ! "
         }
@@ -51,5 +53,25 @@ class AuthViewModel: ObservableObject {
         confirmPassword = ""
     }
     
+    func updateProfile(fullName: String, email: String, password: String, profileImage: String?) {
+        guard var user = currentUser else { return }
+        user.fullName = fullName
+        user.email = email
+        user.password = password
+        user.profileImage = profileImage
+        
+        db.updateUser(user: user)
+        currentUser = user
+    }
+    
+    func logout() {
+        currentUser = nil
+        isLoggedIn = false
+        email = ""
+        password = ""
+        fullName = ""
+        confirmPassword = ""
+        print("Deconnexion reussie")
+    }
 }
 
