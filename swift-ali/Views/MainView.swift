@@ -8,6 +8,7 @@ import SwiftUI
 
 struct MainView : View {
     var body : some View{
+        HeaderView(logoName: "icon", appName: "Retailler")
         TabView{
             NavigationStack{
                 HomeView()
