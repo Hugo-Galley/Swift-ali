@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct swift_aliApp: App {
+    
+    @StateObject private var viewModel = AuthViewModel()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(viewModel)
         }
     }
 }

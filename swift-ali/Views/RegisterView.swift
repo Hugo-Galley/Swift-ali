@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct RegisterView: View {
-    @StateObject private var viewModel = AuthViewModel()
+    @EnvironmentObject var viewModel : AuthViewModel
     
     var body: some View {
         ZStack {
@@ -53,7 +53,7 @@ struct RegisterView: View {
                 
                 HStack {
                     Text("Déjà un compte ?")
-                    NavigationLink(destination: LoginView()) {
+                    NavigationLink(destination: LoginView().environmentObject(viewModel)) {
                         Text("Se connecter")
                             .foregroundColor(.psgBlue)
                             .bold()
@@ -65,5 +65,8 @@ struct RegisterView: View {
         }
         .navigationTitle("Inscription")
         .navigationBarTitleDisplayMode(.inline)
+        .alert(viewModel.alertMessage, isPresented: $viewModel.showAlert) {
+            Button("OK", role: .cancel) { }
+        }
     }
 }

@@ -30,11 +30,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		6734BCC52E8E6CCE005B74FA /* swift-ali */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "swift-ali";
-			sourceTree = "<group>";
-		};
 		6734BCD32E8E6CCF005B74FA /* swift-aliTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "swift-aliTests";
@@ -43,6 +38,11 @@
 		6734BCDD2E8E6CCF005B74FA /* swift-aliUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "swift-aliUITests";
+			sourceTree = "<group>";
+		};
+		C7CB800A2E8FB06E009DDE07 /* swift-ali */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "swift-ali";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,7 +75,7 @@
 		6734BCBA2E8E6CCE005B74FA = {
 			isa = PBXGroup;
 			children = (
-				6734BCC52E8E6CCE005B74FA /* swift-ali */,
+				C7CB800A2E8FB06E009DDE07 /* swift-ali */,
 				6734BCD32E8E6CCF005B74FA /* swift-aliTests */,
 				6734BCDD2E8E6CCF005B74FA /* swift-aliUITests */,
 				6734BCC42E8E6CCE005B74FA /* Products */,
@@ -108,7 +108,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				6734BCC52E8E6CCE005B74FA /* swift-ali */,
+				C7CB800A2E8FB06E009DDE07 /* swift-ali */,
 			);
 			name = "swift-ali";
 			packageProductDependencies = (
@@ -395,6 +395,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6PWC6GVL53;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -407,7 +408,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.hugogalley.swift-ali";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.axelflahaut.swift-ali";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -426,6 +427,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6PWC6GVL53;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -438,7 +440,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.hugogalley.swift-ali";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.axelflahaut.swift-ali";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
