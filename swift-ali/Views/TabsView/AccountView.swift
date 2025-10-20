@@ -3,11 +3,9 @@ import PhotosUI
 
 struct AccountView: View {
     @EnvironmentObject var viewModel: AuthViewModel
+    @EnvironmentObject var cart: CartViewModel
     @State private var isDarkMode = false
     
-    @State private var fullName: String = ""
-    @State private var email: String = ""
-    @State private var password: String = ""
     @State private var selectedImage: UIImage? = nil
     @State private var pickerItem: PhotosPickerItem? = nil
     
@@ -55,60 +53,61 @@ struct AccountView: View {
             }
             
             if let user = viewModel.currentUser {
-                Form {
-                    TextField("Nom complet", text: $fullName)
-                    TextField("Email", text: $email)
-                    SecureField("Mot de passe", text: $password)
+                VStack(spacing: 20) {
+                    // Affichage nom et email en lecture seule
+                    Text(user.fullName)
+                        .font(.title2)
+                        .bold()
                     
+                    Text(user.email)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                    
+                    // Toggle dark mode
                     Toggle(isOn: $isDarkMode) {
                         Text("Mode sombre")
                     }
-                }
-                .onAppear {
-                    fullName = user.fullName
-                    email = user.email
-                    password = user.password
-                }
-                
-                Button(action: {
-                    viewModel.updateProfile(
-                        fullName: fullName,
-                        email: email,
-                        password: password,
-                        profileImage: getProfileImagePath()
-                    )
-                }) {
-                    Text(" Enregistrer")
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.psgBlue)
-                        .cornerRadius(10)
-                }
-                
-                .padding()
-                
-                Button(action: {
-                                    showLogoutAlert = true
-                                }) {
-                                    Text(" Déconnexion")
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .frame(maxWidth: .infinity)
-                                        .background(Color.psgRed)
-                                        .cornerRadius(10)
-                                }
-                                .padding()
-                                .alert("Voulez-vous vous déconnecter ?", isPresented: $showLogoutAlert) {
-                                    Button("Annuler", role: .cancel) {}
-                                    Button("Déconnexion", role: .destructive) {
-                                        viewModel.logout()
-                                    }
-                                } message: {
-                                    Text("Vous serez redirigé vers la page de connexion.")
-                                }
-                            }
+                    .padding(.horizontal)
+                    
+                    // Bouton Mes commandes
+                    NavigationLink(destination: OrdersView()
+                                    .environmentObject(viewModel)
+                                    .environmentObject(cart)) {
+                        Text("Mes commandes")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.green)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+                    
+                    // Bouton Déconnexion
+                    Button(action: {
+                        showLogoutAlert = true
+                    }) {
+                        Text("Déconnexion")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.psgRed)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+                    .alert("Voulez-vous vous déconnecter ?", isPresented: $showLogoutAlert) {
+                        Button("Annuler", role: .cancel) {}
+                        Button("Déconnexion", role: .destructive) {
+                            viewModel.logout()
                         }
+                    } message: {
+                        Text("Vous serez redirigé vers la page de connexion.")
+                    }
+                }
+                .padding()
+            }
+            
+            Spacer()
+        }
             .preferredColorScheme(isDarkMode ? .dark : .light)
     }
     

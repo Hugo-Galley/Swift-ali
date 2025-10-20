@@ -1,11 +1,8 @@
 import SwiftUI
 
 struct ProductSelectionView: View {
-    var imageName: String
-    var title: String
-    var price: String
-    var sizes: [String]
-
+    let product: Product
+    
     @State private var selectedSize: String? = nil
     @Environment(\.presentationMode) var presentationMode
     
@@ -27,69 +24,110 @@ struct ProductSelectionView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 10)
                 
-                Text(title)
-                    .font(.title2)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                
-                Image(imageName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(height: 300)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                
-                Text("Prix : \(price)")
-                    .font(.body)
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Taille :")
-                        .font(.body)
-                    
-                    HStack(spacing: 12) {
-                        ForEach(sizes, id: \.self) { size in
-                            Button(action: {
-                                selectedSize = size
-                            }) {
-                                Text(size)
-                                    .frame(width: 50, height: 40)
-                                    .background(selectedSize == size ? Color.black : Color.gray.opacity(0.2))
-                                    .foregroundColor(selectedSize == size ? .white : .black)
-                                    .cornerRadius(8)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        Text(product.name)
+                            .font(.title2)
+                            .bold()
+                        
+                        Image(product.image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 300)
+                            .cornerRadius(12)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Équipe")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            Text(product.team)
+                                .font(.headline)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Description")
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                            Text(product.description)
+                                .font(.body)
+                                .foregroundColor(.secondary)
+                        }
+                        
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Prix")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                Text(String(format: "%.2f €", product.price))
+                                    .font(.title3)
+                                    .bold()
+                                    .foregroundColor(.psgBlue)
+                            }
+                            
+                            Spacer()
+                            
+                            VStack(alignment: .trailing, spacing: 4) {
+                                Text("Stock")
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
+                                Text("\(product.stock) disponibles")
+                                    .font(.subheadline)
+                                    .foregroundColor(product.stock > 10 ? .green : .orange)
                             }
                         }
-                        Spacer()
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(12)
+                        
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Taille")
+                                .font(.headline)
+                            
+                            HStack(spacing: 12) {
+                                ForEach(product.sizes, id: \.self) { size in
+                                    Button(action: {
+                                        selectedSize = size
+                                    }) {
+                                        Text(size)
+                                            .fontWeight(.semibold)
+                                            .frame(width: 60, height: 44)
+                                            .background(selectedSize == size ? Color.psgBlue : Color.gray.opacity(0.2))
+                                            .foregroundColor(selectedSize == size ? .white : .black)
+                                            .cornerRadius(8)
+                                    }
+                                }
+                                Spacer()
+                            }
+                        }
                     }
+                    .padding(.horizontal, 20)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
                 
                 Spacer()
                 
                 Button(action: {
-                    if let size = selectedSize,
-                       let priceValue = Double(price.replacingOccurrences(of: "€", with: "")
-                                                    .replacingOccurrences(of: ",", with: ".")
-                                                    .trimmingCharacters(in: .whitespaces)) {
-                        let product = Product(image: imageName, title: title, price: priceValue, size: size)
-                        cart.addToCart(product)
-                        print(" Produit ajouté : \(title), taille : \(size)")
+                    if let size = selectedSize {
+                        // Créer un produit avec la taille sélectionnée pour le panier
+                        // Note: Le CartViewModel devra être adapté pour gérer le nouveau modèle Product
+                        cart.addToCart(product, size: size)
+                        print("✅ Produit ajouté : \(product.name), taille : \(size)")
                         presentationMode.wrappedValue.dismiss()
                     }
                 }) {
-                    Text("Ajouter au panier")
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(selectedSize == nil ? Color.gray : Color.psgBlue)
-                        .cornerRadius(8)
+                    HStack {
+                        Image(systemName: "cart.badge.plus")
+                        Text("Ajouter au panier")
+                            .fontWeight(.bold)
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 54)
+                    .background(selectedSize == nil ? Color.gray : Color.psgBlue)
+                    .cornerRadius(12)
                 }
                 .padding(.horizontal, 20)
-                .padding(.bottom, 100)
-                .disabled(selectedSize == nil)
+                .padding(.bottom, 40)
+                .disabled(selectedSize == nil || product.stock == 0)
             }
             .background(Color.white)
         }

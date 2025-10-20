@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var viewModel = AuthViewModel()
-    
+    @EnvironmentObject var viewModel: AuthViewModel
+
     var body: some View {
         NavigationStack {
             if viewModel.isLoggedIn {
@@ -13,9 +13,11 @@ struct ContentView: View {
                     .environmentObject(viewModel)
             }
         }
+        .animation(.easeInOut, value: viewModel.isLoggedIn)
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(AuthViewModel())
 }

@@ -2,6 +2,8 @@ import SwiftUI
 
 struct CartView: View {
     @EnvironmentObject var cart: CartViewModel
+    @EnvironmentObject var auth: AuthViewModel
+    @State private var showOrderPlaced = false
     
     var body: some View {
         VStack {
@@ -11,33 +13,36 @@ struct CartView: View {
                     .padding()
             } else {
                 List {
-                    ForEach(cart.items) { product in
+                    ForEach(cart.items) { cartItem in
                         HStack {
-                            Image(product.image)
+                            Image(cartItem.product.image, bundle: .main)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 60, height: 60)
                                 .cornerRadius(8)
                             
-                            VStack(alignment: .leading) {
-                                Text(product.title)
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(cartItem.product.name)
                                     .font(.headline)
-                                if let size = product.size {
-                                    Text("Taille : \(size)")
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                }
+                                    .lineLimit(2)
+                                Text("Taille : \(cartItem.selectedSize)")
+                                    .font(.subheadline)
+                                    .foregroundColor(.gray)
                             }
                             
                             Spacer()
                             
-                            Text("\(product.price, specifier: "%.2f") €")
+                            Text(String(format: "%.2f €", cartItem.price))
                                 .font(.subheadline)
                                 .bold()
+                                .foregroundColor(.psgBlue)
                         }
+                        .padding(.vertical, 4)
                     }
                     .onDelete { indexSet in
-                        indexSet.map { cart.items[$0] }.forEach(cart.removeFromCart)
+                        indexSet.forEach { index in
+                            cart.removeFromCart(cart.items[index])
+                        }
                     }
                 }
                 
@@ -52,7 +57,12 @@ struct CartView: View {
                 .padding()
                 
                 Button(action: {
-                    print("Passer la commande")
+                    // Place order
+                    cart.placeOrder(forUserId: auth.currentUser?.id) { success in
+                        if success {
+                            showOrderPlaced = true
+                        }
+                    }
                 }) {
                     Text("Commander")
                         .foregroundColor(.white)
@@ -60,6 +70,11 @@ struct CartView: View {
                         .padding()
                         .background(Color.green)
                         .cornerRadius(12)
+                }
+                .alert("Commande passée", isPresented: $showOrderPlaced) {
+                    Button("OK", role: .cancel) {}
+                } message: {
+                    Text("Votre commande a bien été enregistrée. Vous pouvez la consulter dans Mes commandes.")
                 }
                 .padding(.horizontal)
             }

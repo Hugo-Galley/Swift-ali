@@ -1,0 +1,90 @@
+[
+  {
+    "id": 1,
+    "name": "Maillot FC Barcelona Domicile 2024/25",
+    "team": "FC Barcelona",
+    "price": 89.99,
+    "description": "Maillot officiel du FC Barcelona pour la saison 2024/25. Design iconique blaugrana avec les célèbres bandes verticales.",
+    "image": "barca",
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "stock": 50,
+    "category": "Maillot Domicile"
+  },
+  {
+    "id": 2,
+    "name": "Maillot PSG Domicile 2024/25",
+    "team": "Paris Saint-Germain",
+    "price": 94.99,
+    "description": "Maillot officiel du Paris Saint-Germain. Design élégant aux couleurs emblématiques du club parisien.",
+    "image": "psg",
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "stock": 45,
+    "category": "Maillot Domicile"
+  },
+  {
+    "id": 3,
+    "name": "Maillot Real Madrid Domicile 2024/25",
+    "team": "Real Madrid",
+    "price": 92.99,
+    "description": "Maillot officiel du Real Madrid. Le blanc légendaire des Merengues avec finitions dorées.",
+    "image": "real",
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "stock": 60,
+    "category": "Maillot Domicile"
+  },
+  {
+    "id": 4,
+    "name": "Maillot Bayern Munich Domicile 2024/25",
+    "team": "Bayern Munich",
+    "price": 87.99,
+    "description": "Maillot officiel du Bayern Munich. Le rouge bavarois classique avec détails modernes.",
+    "image": "bayern",
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "stock": 40,
+    "category": "Maillot Domicile"
+  },
+  {
+    "id": 5,
+    "name": "Maillot FC Barcelona Extérieur 2024/25",
+    "team": "FC Barcelona",
+    "price": 89.99,
+    "description": "Maillot extérieur du FC Barcelona. Design moderne et audacieux pour les matchs à l'extérieur.",
+    "image": "barca",
+    "sizes": ["S", "M", "L", "XL"],
+    "stock": 35,
+    "category": "Maillot Extérieur"
+  },
+  {
+    "id": 6,
+    "name": "Maillot PSG Extérieur 2024/25",
+    "team": "Paris Saint-Germain",
+    "price": 94.99,
+    "description": "Maillot extérieur du PSG. Design innovant pour les déplacements du club parisien.",
+    "image": "psg",
+    "sizes": ["S", "M", "L", "XL"],
+    "stock": 30,
+    "category": "Maillot Extérieur"
+  },
+  {
+    "id": 7,
+    "name": "Maillot Real Madrid Extérieur 2024/25",
+    "team": "Real Madrid",
+    "price": 92.99,
+    "description": "Maillot extérieur du Real Madrid. Élégance et performance pour les matchs en déplacement.",
+    "image": "real",
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "stock": 42,
+    "category": "Maillot Extérieur"
+  },
+  {
+    "id": 8,
+    "name": "Maillot Bayern Munich Extérieur 2024/25",
+    "team": "Bayern Munich",
+    "price": 87.99,
+    "description": "Maillot extérieur du Bayern Munich. Design alternatif pour les matchs loin de l'Allianz Arena.",
+    "image": "bayern",
+    "sizes": ["S", "M", "L", "XL"],
+    "stock": 38,
+    "category": "Maillot Extérieur"
+  }
+]

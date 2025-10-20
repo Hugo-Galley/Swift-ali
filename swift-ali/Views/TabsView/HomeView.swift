@@ -1,13 +1,8 @@
 import SwiftUI
 
 struct HomeView: View {
-    
-    let products = [
-        (image: "psg", title: "PSG Domicile 24/25", price: "89,99 €"),
-        (image: "real", title: "Real Madrid Extérieur", price: "84,99 €"),
-        (image: "barca", title: "Barça Third", price: "79,99 €"),
-        (image: "bayern", title: "Bayern Domicile", price: "89,99 €"),
-    ]
+    @StateObject private var viewModel = ProductViewModel()
+    @State private var searchText = ""
     
     let collumns = [
         GridItem(.flexible(), spacing: 16),
@@ -16,31 +11,59 @@ struct HomeView: View {
     
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: collumns, spacing: 16) {
-                ForEach(products, id: \.title) { product in
-                    NavigationLink(destination: ProductSelectionView(
-                        imageName: product.image,
-                        title: product.title,
-                        price: product.price,
-                        sizes: ["S","M","L","XL"]
-                    )) {
-                        CardView(
-                            imageName: product.image,
-                            title: product.title,
-                            price: product.price
-                        )
+            if viewModel.isLoading {
+                ProgressView("Chargement des maillots...")
+                    .padding()
+            } else if let errorMessage = viewModel.errorMessage {
+                VStack(spacing: 16) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.system(size: 50))
+                        .foregroundColor(.red)
+                    Text("Erreur")
+                        .font(.title)
+                        .bold()
+                    Text(errorMessage)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                    Button("Réessayer") {
+                        Task {
+                            await viewModel.loadProducts()
+                        }
                     }
-                    .foregroundColor(.black)
+                    .buttonStyle(.borderedProminent)
                 }
+                .padding()
+            } else {
+                LazyVGrid(columns: collumns, spacing: 16) {
+                    ForEach(viewModel.products) { product in
+                        NavigationLink(destination: ProductSelectionView(product: product)) {
+                            CardView(
+                                imageName: product.image,
+                                title: product.name,
+                                price: String(format: "%.2f €", product.price)
+                            )
+                        }
+                        .foregroundColor(.black)
+                    }
+                }
+                .padding()
             }
-            .padding()
         }
         .navigationTitle("Boutique")
+        .searchable(text: $searchText, prompt: "Rechercher un maillot...")
+        .onChange(of: searchText) { oldValue, newValue in
+            Task {
+                await viewModel.searchProducts(query: newValue)
+            }
+        }
         .toolbar {
             NavigationLink(destination: CartView()) {
                 Image(systemName: "cart.fill")
                     .foregroundColor(.psgRed)
             }
+        }
+        .task {
+            await viewModel.loadProducts()
         }
     }
 }

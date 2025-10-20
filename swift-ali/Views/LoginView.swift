@@ -24,24 +24,35 @@ struct LoginView: View {
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(12)
                     .autocapitalization(.none)
+                    .disabled(viewModel.isLoading)
                 
                 SecureField("Mot de Passe", text: $viewModel.password)
                     .padding()
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(12)
+                    .disabled(viewModel.isLoading)
                 
                 Button(action: {
                     viewModel.login()
                 }) {
-                    Text("Se connecter")
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(LinearGradient(colors: [.psgBlue, .psgRed],
-                                                   startPoint: .leading,
-                                                   endPoint: .trailing))
-                        .cornerRadius(12)
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.gray)
+                            .cornerRadius(12)
+                    } else {
+                        Text("Se connecter")
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(LinearGradient(colors: [.psgBlue, .psgRed],
+                                                       startPoint: .leading,
+                                                       endPoint: .trailing))
+                            .cornerRadius(12)
+                    }
                 }
+                .disabled(viewModel.isLoading)
                 
                 HStack {
                     Text("Pas de compte ?")

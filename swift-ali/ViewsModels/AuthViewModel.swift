@@ -10,23 +10,42 @@ class AuthViewModel: ObservableObject {
     
     
     @Published var isLoggedIn: Bool = false
+    @Published var isLoading: Bool = false
     @Published var alertMessage: String = ""
     @Published var showAlert: Bool = false
     @Published var currentUser: User? = nil
     
-    private let db = DatabaseManager.shared
+    private lazy var db = DatabaseManager.shared
     
     
     func login() {
-        if db.validateUser(email: email,  password: password) {
-            print("Connexion réussie")
-            isLoggedIn = true
-            alertMessage = "Connexion Réussie !"
-            currentUser = db.getUserByEmail(email: email)
-        } else {
-            alertMessage = "Email ou mot de passe invalide ! "
+        let email = self.email
+        let password = self.password
+        DispatchQueue.main.async {
+            self.isLoading = true
         }
-        showAlert = true
+
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            let valid = self.db.validateUser(email: email, password: password)
+            if valid {
+                let user = self.db.getUserByEmail(email: email)
+                DispatchQueue.main.async {
+                    print("Connexion réussie")
+                    self.isLoggedIn = true
+                    self.alertMessage = "Connexion Réussie !"
+                    self.currentUser = user
+                    self.showAlert = true
+                    self.isLoading = false
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.alertMessage = "Email ou mot de passe invalide ! "
+                    self.showAlert = true
+                    self.isLoading = false
+                }
+            }
+        }
     }
     
     func register() {
@@ -44,13 +63,23 @@ class AuthViewModel: ObservableObject {
             return
         }
         
-        db.insertUser(fullName: fullName, email: email, password: password)
-        alertMessage = "compte créé avec succès !"
-        
-        fullName = ""
-        email = ""
-        password = ""
-        confirmPassword = ""
+        let fName = fullName
+        let mail = email
+        let pwd = password
+        let pImage: String? = nil
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            self.db.insertUser(fullName: fName, email: mail, password: pwd, profileImage: pImage)
+            DispatchQueue.main.async {
+                self.alertMessage = "compte créé avec succès !"
+                self.showAlert = true
+
+                self.fullName = ""
+                self.email = ""
+                self.password = ""
+                self.confirmPassword = ""
+            }
+        }
     }
     
     func updateProfile(fullName: String, email: String, password: String, profileImage: String?) {
@@ -59,9 +88,14 @@ class AuthViewModel: ObservableObject {
         user.email = email
         user.password = password
         user.profileImage = profileImage
-        
-        db.updateUser(user: user)
-        currentUser = user
+        // Update en background
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            self.db.updateUser(user: user)
+            DispatchQueue.main.async {
+                self.currentUser = user
+            }
+        }
     }
     
     func logout() {

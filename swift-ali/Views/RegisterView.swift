@@ -32,11 +32,17 @@ struct RegisterView: View {
                     .padding()
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(12)
+                    .textContentType(.none)
+                    .disableAutocorrection(true)
+                    .autocapitalization(.none)
                 
                 SecureField("Confirmer le mot de passe", text: $viewModel.confirmPassword)
                     .padding()
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(12)
+                    .textContentType(.none)
+                    .disableAutocorrection(true)
+                    .autocapitalization(.none)
                 
                 Button(action: {
                     viewModel.register()
